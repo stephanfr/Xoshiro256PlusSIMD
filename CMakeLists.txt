@@ -22,5 +22,7 @@ endif ()
 include_directories(
   )
 
-add_subdirectory(UnitTest)
-add_subdirectory(UnitTestNoAVX)
+if( XOROSHIRO256PLUS_IS_MASTER_PROJECT )
+  add_subdirectory(UnitTest)
+  add_subdirectory(UnitTestNoAVX)
+endif ()
