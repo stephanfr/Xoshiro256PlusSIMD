@@ -25,7 +25,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
    a 64-bit seed, we suggest to seed a splitmix64 generator and use its
    output to fill s. */
 
-namespace Xoroshiro256PlusReference
+namespace Xoshiro256PlusReference
 {
     static inline uint64_t rotl(const uint64_t x, int k) { return (x << k) | (x >> (64 - k)); }
 
@@ -115,4 +115,4 @@ namespace Xoroshiro256PlusReference
         s[2] = s2;
         s[3] = s3;
     }
-}  // namespace Xoroshiro256PlusReference
+}  // namespace Xoshiro256PlusReference

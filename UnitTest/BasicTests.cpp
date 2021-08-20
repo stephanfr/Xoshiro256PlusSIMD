@@ -1,11 +1,11 @@
 #include <catch2/catch_all.hpp>
 #include <iostream>
 
-#include "../include/Xoroshiro256Plus.h"
-#include "Xoroshiro256PlusReference.h"
+#include "../include/Xoshiro256Plus.h"
+#include "Xoshiro256PlusReference.h"
 
-typedef SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::NONE> Xoroshiro256PlusSerial;
-typedef SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::AVX2> Xoroshiro256PlusAVX2;
+typedef SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::NONE> Xoshiro256PlusSerial;
+typedef SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::AVX2> Xoshiro256PlusAVX2;
 
 constexpr size_t NUM_SAMPLES = 1000;
 constexpr uint64_t SEED = 1;
@@ -16,17 +16,17 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
     {
         SEFUtility::RNG::SplitMix64 split_mix(SEED);
 
-        Xoroshiro256PlusReference::s[0] = split_mix.next();
-        Xoroshiro256PlusReference::s[1] = split_mix.next();
-        Xoroshiro256PlusReference::s[2] = split_mix.next();
-        Xoroshiro256PlusReference::s[3] = split_mix.next();
+        Xoshiro256PlusReference::s[0] = split_mix.next();
+        Xoshiro256PlusReference::s[1] = split_mix.next();
+        Xoshiro256PlusReference::s[2] = split_mix.next();
+        Xoshiro256PlusReference::s[3] = split_mix.next();
 
-        Xoroshiro256PlusSerial serial_rng(SEED);
-        Xoroshiro256PlusAVX2 avx2_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusAVX2 avx2_rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
-            uint64_t next_ref = Xoroshiro256PlusReference::next();
+            uint64_t next_ref = Xoshiro256PlusReference::next();
             uint64_t next_serial = serial_rng.next();
 
             REQUIRE(next_ref == next_serial);
@@ -37,19 +37,19 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
     {
         SEFUtility::RNG::SplitMix64 split_mix(SEED);
 
-        Xoroshiro256PlusReference::s[0] = split_mix.next();
-        Xoroshiro256PlusReference::s[1] = split_mix.next();
-        Xoroshiro256PlusReference::s[2] = split_mix.next();
-        Xoroshiro256PlusReference::s[3] = split_mix.next();
+        Xoshiro256PlusReference::s[0] = split_mix.next();
+        Xoshiro256PlusReference::s[1] = split_mix.next();
+        Xoshiro256PlusReference::s[2] = split_mix.next();
+        Xoshiro256PlusReference::s[3] = split_mix.next();
 
-        Xoroshiro256PlusReference::long_jump();
+        Xoshiro256PlusReference::long_jump();
 
-        Xoroshiro256PlusSerial serial_rng(SEED);
-        Xoroshiro256PlusAVX2 avx2_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusAVX2 avx2_rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
-            uint64_t next_ref = Xoroshiro256PlusReference::next();
+            uint64_t next_ref = Xoshiro256PlusReference::next();
             auto next_serial = serial_rng.next4();
             auto next_simd = avx2_rng.next4();
 
@@ -64,21 +64,21 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
     {
         SEFUtility::RNG::SplitMix64 split_mix(SEED);
 
-        Xoroshiro256PlusReference::s[0] = split_mix.next();
-        Xoroshiro256PlusReference::s[1] = split_mix.next();
-        Xoroshiro256PlusReference::s[2] = split_mix.next();
-        Xoroshiro256PlusReference::s[3] = split_mix.next();
+        Xoshiro256PlusReference::s[0] = split_mix.next();
+        Xoshiro256PlusReference::s[1] = split_mix.next();
+        Xoshiro256PlusReference::s[2] = split_mix.next();
+        Xoshiro256PlusReference::s[3] = split_mix.next();
 
-        Xoroshiro256PlusReference::jump();
+        Xoshiro256PlusReference::jump();
 
         {
-            Xoroshiro256PlusSerial serial_rng(
-                Xoroshiro256PlusSerial(SEED),
-                SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::NONE>::JumpOnCopy::Short);
+            Xoshiro256PlusSerial serial_rng(
+                Xoshiro256PlusSerial(SEED),
+                SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::NONE>::JumpOnCopy::Short);
 
             for (auto i = 0; i < NUM_SAMPLES; i++)
             {
-                uint64_t next_ref = Xoroshiro256PlusReference::next();
+                uint64_t next_ref = Xoshiro256PlusReference::next();
                 uint64_t next_serial = serial_rng.next();
 
                 REQUIRE(next_ref == next_serial);
@@ -90,21 +90,21 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
     {
         SEFUtility::RNG::SplitMix64 split_mix(SEED);
 
-        Xoroshiro256PlusReference::s[0] = split_mix.next();
-        Xoroshiro256PlusReference::s[1] = split_mix.next();
-        Xoroshiro256PlusReference::s[2] = split_mix.next();
-        Xoroshiro256PlusReference::s[3] = split_mix.next();
+        Xoshiro256PlusReference::s[0] = split_mix.next();
+        Xoshiro256PlusReference::s[1] = split_mix.next();
+        Xoshiro256PlusReference::s[2] = split_mix.next();
+        Xoshiro256PlusReference::s[3] = split_mix.next();
 
-        Xoroshiro256PlusReference::long_jump();
+        Xoshiro256PlusReference::long_jump();
 
         {
-            Xoroshiro256PlusSerial serial_rng(
-                Xoroshiro256PlusSerial(SEED),
-                SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::NONE>::JumpOnCopy::Long);
+            Xoshiro256PlusSerial serial_rng(
+                Xoshiro256PlusSerial(SEED),
+                SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::NONE>::JumpOnCopy::Long);
 
             for (auto i = 0; i < NUM_SAMPLES; i++)
             {
-                uint64_t next_ref = Xoroshiro256PlusReference::next();
+                uint64_t next_ref = Xoshiro256PlusReference::next();
                 uint64_t next_serial = serial_rng.next();
 
                 REQUIRE(next_ref == next_serial);
@@ -114,7 +114,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("Double Test")
     {
-        Xoroshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
 
         double mean = 0;
 
@@ -134,7 +134,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("AVX Double Test")
     {
-        Xoroshiro256PlusAVX2 avx_rng(SEED);
+        Xoshiro256PlusAVX2 avx_rng(SEED);
 
         double mean = 0;
 
@@ -160,7 +160,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("Integer Bounding")
     {
-        Xoroshiro256PlusSerial rng(SEED);
+        Xoshiro256PlusSerial rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -179,7 +179,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("AVX Integer Bounding")
     {
-        Xoroshiro256PlusAVX2 rng(SEED);
+        Xoshiro256PlusAVX2 rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -194,8 +194,8 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("Serial and AVX Integer Bounding Match")
     {
-        Xoroshiro256PlusSerial serial_rng(SEED);
-        Xoroshiro256PlusAVX2 avx_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusAVX2 avx_rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -211,7 +211,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
     
     SECTION("Double Bounding")
     {
-        Xoroshiro256PlusSerial rng(SEED);
+        Xoshiro256PlusSerial rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -230,7 +230,7 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("AVX Double Bounding")
     {
-        Xoroshiro256PlusAVX2 rng(SEED);
+        Xoshiro256PlusAVX2 rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -245,8 +245,8 @@ TEST_CASE("Reference, Serial and SIMD Implementations Match", "[basic]")
 
     SECTION("Serial and AVX Double Bounding Match")
     {
-        Xoroshiro256PlusSerial serial_rng(SEED);
-        Xoroshiro256PlusAVX2 avx_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusAVX2 avx_rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {

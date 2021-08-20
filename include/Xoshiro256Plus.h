@@ -29,7 +29,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 */
 
 /*
-    A note on Xoroshiro256Plus:
+    A note on Xoshiro256Plus:
 
    The statistics on this RNG are very good but it you *need* something for crypto - you may want to look
    for a different RNG.  Aside from crypto - this RNG should be perfectly fine.
@@ -50,7 +50,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 namespace SEFUtility::RNG
 {
     template <SIMDInstructionSet SIMD>
-    class Xoroshiro256Plus
+    class Xoshiro256Plus
     {
        public:
         class FourIntegerValues
@@ -94,7 +94,7 @@ namespace SEFUtility::RNG
             FourIntegerValues(FourIntegerValues& value_to_copy) = delete;
             FourIntegerValues(const FourIntegerValues& value_to_copy) = delete;
 
-            friend class Xoroshiro256Plus;
+            friend class Xoshiro256Plus;
         };
 
         class FourDoubleValues
@@ -126,7 +126,7 @@ namespace SEFUtility::RNG
             FourDoubleValues(FourDoubleValues& value_to_copy) = delete;
             FourDoubleValues(const FourDoubleValues& value_to_copy) = delete;
 
-            friend class Xoroshiro256Plus;
+            friend class Xoshiro256Plus;
         };
 
         enum class JumpOnCopy : int32_t
@@ -136,7 +136,7 @@ namespace SEFUtility::RNG
             Long
         };
 
-        Xoroshiro256Plus(const uint64_t seed)
+        Xoshiro256Plus(const uint64_t seed)
         {
             static_assert(SIMD != SIMDInstructionSet::AVX, "AVX RNG is not supported - just use NONE");
 
@@ -163,7 +163,7 @@ namespace SEFUtility::RNG
             }
         }
 
-        Xoroshiro256Plus(const std::array<uint64_t, 4> seed) : serial_state_(seed)
+        Xoshiro256Plus(const std::array<uint64_t, 4> seed) : serial_state_(seed)
         {
             static_assert(SIMD != SIMDInstructionSet::AVX, "AVX RNG is not supported - just use NONE");
 
@@ -183,7 +183,7 @@ namespace SEFUtility::RNG
             }
         }
 
-        Xoroshiro256Plus(const Xoroshiro256Plus<SIMD>& rng_to_copy, JumpOnCopy jump_dist = JumpOnCopy::Short)
+        Xoshiro256Plus(const Xoshiro256Plus<SIMD>& rng_to_copy, JumpOnCopy jump_dist = JumpOnCopy::Short)
             : serial_state_(rng_to_copy.serial_state_),
               serial_next4_state_(rng_to_copy.serial_next4_state_),
               simd_state_(rng_to_copy.simd_state_, jump_dist)

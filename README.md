@@ -1,12 +1,12 @@
-# Xoroshiro256PlusSIMD
-Serial and SIMD implementation of the Xoroshiro256+ random number generator.
+# Xoshiro256PlusSIMD
+Serial and SIMD implementation of the Xoshiro256+ random number generator.
 
 
-This project provides a C++ implementation of Xoroshiro256+ that matches the performance of the reference C
-implementation of David Blackman and Sebastiano Vigna.  Xoroshiro256+ combines high speed, small memory
+This project provides a C++ implementation of Xoshiro256+ that matches the performance of the reference C
+implementation of David Blackman and Sebastiano Vigna.  Xoshiro256+ combines high speed, small memory
 space requirements for stored state and excellent statistical quality.  For cryptographic use cases or
 use cases where absolutely the best statistical quality is required - maybe consider a different RNG like
-the Mersenne Twist.  For any just about any conventional simulation or testing use case, Xoroshiro256+ should be perfectly fine statistically.
+the Mersenne Twist.  For any just about any conventional simulation or testing use case, Xoshiro256+ should be perfectly fine statistically.
 
 This implementation is a header-only library and provides the following capabilities:
 
@@ -31,8 +31,8 @@ being the next value in a single series, instead of each of the four values havi
 of that approach is that the serial implementation would return different four wide values than the AVX2 implementation.  
 The AVX2 implementation must use distinct seeds for each of the four values.
 
-The random series for each of the four-wide values are separated by 2^192 values - i.e. a Xoroshiro256+ 'long jump'
-separates the seed for each of the four values.  For clarity, the Xoroshiro256+ has a state space of 2^256.
+The random series for each of the four-wide values are separated by 2^192 values - i.e. a Xoshiro256+ 'long jump'
+separates the seed for each of the four values.  For clarity, the Xoshiro256+ has a state space of 2^256.
 
 The reduction of the uint64s to an integer range takes uint32 bounds.  This is s significant reduction in the size 
 of the random values but permits reduction while avoiding taking a modulus.  If you have a need for random
@@ -46,7 +46,7 @@ all that is needed is to have the -mavx2 compiler option and the __AVX2_AVAILABL
 
 # Usage
 
-The class Xoroshiro256Plus is a template class and takes an SIMDInstructionSet enumerated value as its only
+The class Xoshiro256Plus is a template class and takes an SIMDInstructionSet enumerated value as its only
 template parameter.  SIMDInstructionSet may be 'NONE', 'AVX' or 'AVX2'.  The SIMD acceleration requires the AVX2
 instruction set and uses 'if contexpr' to control code generation at compile time.  There is also a preprocessor
 symbol __AVX2_AVAILABLE__ which must be defined to permit AVX2 instances of the RNG to be created.  It it completely
@@ -54,18 +54,18 @@ reasonable to have the AVX2 instruction set available but still use an RNG insta
 
     #define __AVX2_AVAILABLE__
 
-    #include "Xoroshiro256Plus.h"
+    #include "Xoshiro256Plus.h"
 
     constexpr size_t NUM_SAMPLES = 1000;
     constexpr uint64_t SEED = 1;
 
-    typedef SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::NONE> Xoroshiro256PlusSerial;
-    typedef SEFUtility::RNG::Xoroshiro256Plus<SIMDInstructionSet::AVX2> Xoroshiro256PlusAVX2;
+    typedef SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::NONE> Xoshiro256PlusSerial;
+    typedef SEFUtility::RNG::Xoshiro256Plus<SIMDInstructionSet::AVX2> Xoshiro256PlusAVX2;
 
     bool    InsureFourWideRandomStreamsMatch()
     {
-        Xoroshiro256PlusSerial serial_rng(SEED);
-        Xoroshiro256PlusAVX2 avx_rng(SEED);
+        Xoshiro256PlusSerial serial_rng(SEED);
+        Xoshiro256PlusAVX2 avx_rng(SEED);
 
         for (auto i = 0; i < NUM_SAMPLES; i++)
         {
@@ -121,7 +121,7 @@ on the target system.  By comparison, the AVX2 implementation was able to genera
     -------------------------------------------------------------------------------
     Benchmarks
     -------------------------------------------------------------------------------
-    /home/steve/dev/xoroshiro/Xoroshiro256PlusSIMD/UnitTest/Benchmark.cpp:15
+    /home/steve/dev/xoroshiro/Xoshiro256PlusSIMD/UnitTest/Benchmark.cpp:15
     ...............................................................................
 
     benchmark name                       samples       iterations    estimated
@@ -243,7 +243,7 @@ you ought to be running on a processer with AVX2, pretty much any decent process
     -------------------------------------------------------------------------------
     Benchmarks No AVX
     -------------------------------------------------------------------------------
-    /home/steve/dev/xoroshiro/Xoroshiro256PlusSIMD/UnitTestNoAVX/BenchmarkNoAVX.cpp:14
+    /home/steve/dev/xoroshiro/Xoshiro256PlusSIMD/UnitTestNoAVX/BenchmarkNoAVX.cpp:14
     ...............................................................................
 
     benchmark name                       samples       iterations    estimated
@@ -287,8 +287,8 @@ you ought to be running on a processer with AVX2, pretty much any decent process
 
 All of the source code, unit tests and benchmarks are available in the repository.  Including the SIMD RNG into 
 your project does not guarantee a dramatic performance improvement or even a measurable performance improvement.  
-The Xoroshiro256+ RNG is so fast that if you are using it already, the rest of your code is likely going 
+The Xoshiro256+ RNG is so fast that if you are using it already, the rest of your code is likely going 
 to be consuming the overwhelming bulk of the CPU cycles.  Moving to the SIMD version will not net you much if the 
 rest of your code drawing the random values is not AVX2 friendly already.  If however, you are using a slow RNG 
-then using this code and shifting to the Xoroshiro256+ RNG may be noticeable and it is possible that the compiler
+then using this code and shifting to the Xoshiro256+ RNG may be noticeable and it is possible that the compiler
 may be able to better vectorize your code and take advantage of the SIMD RNG for further performance boosts.
