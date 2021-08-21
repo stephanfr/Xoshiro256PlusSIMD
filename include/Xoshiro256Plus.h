@@ -44,7 +44,6 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 #include <array>
 #include <limits>
 
-#include "SIMDInstructionSet.h"
 #include "SplitMix64.h"
 
 namespace SEFUtility::RNG

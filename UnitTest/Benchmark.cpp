@@ -1,6 +1,8 @@
 #include <catch2/catch_all.hpp>
 #include <iostream>
 
+#include "../include/SIMDInstructionSet.h"
+
 #include "../include/Xoshiro256Plus.h"
 #include "Xoshiro256PlusReference.h"
 
